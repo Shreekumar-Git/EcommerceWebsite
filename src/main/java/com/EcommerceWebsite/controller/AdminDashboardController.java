@@ -21,7 +21,7 @@ public class AdminDashboardController {
     private final ProductService productService;
     private final OrderService orderService;
 
-    // ✔ Admin dashboard
+    // Admin dashboard
     @GetMapping("/dashboard")
 public String dashboard(Model model) {
 
@@ -41,21 +41,21 @@ public String dashboard(Model model) {
 }
 
 
-    // ✔ Add Product Page
+    //  Add Product Page
     @GetMapping("/product/add")
     public String addProductPage(Model model) {
         model.addAttribute("product", new Product());
         return "product-add";
     }
 
-    // ✔ Save new product
+    // Save new product
     @PostMapping("/product/add")
     public String saveProduct(@ModelAttribute Product product) {
         productService.save(product);
         return "redirect:/admin/dashboard?added=true";
     }
 
-    // ✔ Edit product page
+    // Edit product page
     @GetMapping("/product/edit/{id}")
     public String editProduct(@PathVariable Long id, Model model) {
         model.addAttribute("product", productService.get(id).orElse(null));
@@ -68,21 +68,21 @@ public String dashboard(Model model) {
         return "redirect:/admin/dashboard?updated=true";
     }
 
-    // ✔ Delete product
+    // Delete product
     @GetMapping("/product/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productService.delete(id);
         return "redirect:/admin/dashboard?deleted=true";
     }
 
-    // ✔ Accept order
+    // Accept order
     @PostMapping("/orders/accept/{id}")
     public String acceptOrder(@PathVariable Long id) {
         orderService.acceptOrder(id);
         return "redirect:/admin/dashboard?accepted=true";
     }
 
-    // ✔ Deliver order
+    // Deliver order
     @PostMapping("/orders/deliver/{id}")
     public String deliverOrder(@PathVariable Long id) {
         orderService.deliverOrder(id);

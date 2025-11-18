@@ -29,7 +29,6 @@ public class OrderItem {
     private double price; // price per unit
 
     public Object stream() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'stream'");
     }
 }

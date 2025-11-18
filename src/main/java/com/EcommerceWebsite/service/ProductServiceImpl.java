@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long id) {
        Product product = productRepository.findById(id).orElse(null);
     if(product != null){
-        product.setActive(false);  // Soft delete
+        product.setActive(false);  
         productRepository.save(product);
     }
 }

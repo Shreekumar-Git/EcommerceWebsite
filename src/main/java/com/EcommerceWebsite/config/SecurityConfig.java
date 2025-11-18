@@ -36,48 +36,39 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .csrf(csrf -> csrf.disable()) // Allow API POST (place order)
-
+                .csrf(csrf -> csrf.disable()) 
                 .authorizeHttpRequests(auth -> auth
 
-                        // 🔓 Public pages
                         .requestMatchers(
                                 "/", "/login", "/register",
                                 "/css/**", "/js/**", "/images/**",
                                 "/products/**", "/api/products/**"
                         ).permitAll()
 
-                        // 🔓 Swagger (always public)
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
 
-                        // 👤 User-protected pages
                         .requestMatchers(
                                 "/cart", "/checkout",
                                 "/orders", "/order/**"
                         ).authenticated()
 
-                        // 👤 Secure API for logged-in user
                         .requestMatchers("/api/orders/**").authenticated()
 
-                        // 👑 Admin-only pages
                         .requestMatchers("/admin/**").hasRole("ADMIN")
 
-                        // Default behaviour
                         .anyRequest().authenticated()
                 )
 
-                // 🔐 Login Config
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
 
-                // 🔐 Logout Config
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")

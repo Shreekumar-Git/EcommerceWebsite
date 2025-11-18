@@ -19,9 +19,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
     private final CartService cartService;
 
-    // ========================================
     // PLACE ORDER
-    // ========================================
     @Override
     public Order placeOrder(User user) {
 
@@ -60,33 +58,25 @@ public class OrderServiceImpl implements OrderService {
         return order;
     }
 
-    // ========================================
     // LIST USER ORDERS
-    // ========================================
     @Override
     public List<Order> listUserOrders(User user) {
         return orderRepository.findByUserOrderByCreatedAtDesc(user);
     }
 
-    // ========================================
     // LIST ALL (ADMIN)
-    // ========================================
     @Override
     public List<Order> listAll() {
         return orderRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    // ========================================
     // GET BY ID
-    // ========================================
     @Override
     public Order getById(Long id) {
         return orderRepository.findById(id).orElse(null);
     }
 
-    // ========================================
     // USER CANCEL ORDER
-    // ========================================
     @Override
     public Order cancelOrder(Long id, User user) {
         Order order = orderRepository.findById(id)
@@ -104,9 +94,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-    // ========================================
     // ADMIN ACCEPT ORDER → PAID
-    // ========================================
     @Override
     public Order acceptOrder(Long id) {
         Order order = getById(id);
@@ -118,17 +106,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
-    // ========================================
     // SAVE (used by deliverOrder)
-    // ========================================
     @Override
     public Order save(Order order) {
         return orderRepository.save(order);
     }
 
-    // ========================================
     // COUNT BY STATUS
-    // ========================================
     @Override
     public long countByStatus(OrderStatus status) {
         return orderRepository.countByStatus(status);

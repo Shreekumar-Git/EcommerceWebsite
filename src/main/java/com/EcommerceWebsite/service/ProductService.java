@@ -7,11 +7,10 @@ import java.util.Optional;
 
 public interface ProductService {
 
-    // List<Product> listAll();
 
-    Optional<Product> get(Long id);   // Optional version
+    Optional<Product> get(Long id);   
 
-    Product getById(Long id);         // Direct version
+    Product getById(Long id);         
 
     Product save(Product product);
 

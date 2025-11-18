@@ -21,9 +21,7 @@ public class OrderRestController {
     private final OrderService orderService;
     private final UserService userService;
 
-    // =======================
     // 1) PLACE ORDER (USER)
-    // =======================
   @PostMapping("/place")
 public Map<String, Object> placeOrder(@AuthenticationPrincipal UserDetails userDetails) {
 
@@ -36,9 +34,7 @@ public Map<String, Object> placeOrder(@AuthenticationPrincipal UserDetails userD
 }
 
 
-    // =======================
     // 2) LIST MY ORDERS
-    // =======================
     @GetMapping("/my")
     public List<Order> myOrders(@AuthenticationPrincipal UserDetails userDetails) {
 
@@ -52,17 +48,13 @@ public Map<String, Object> placeOrder(@AuthenticationPrincipal UserDetails userD
         return orderService.listUserOrders(user);
     }
 
-    // =======================
     // 3) GET ORDER BY ID
-    // =======================
     @GetMapping("/{id}")
     public Order getOrder(@PathVariable Long id) {
         return orderService.getById(id);
     }
 
-    // =======================
     // 4) CANCEL ORDER (USER)
-    // =======================
     @PostMapping("/cancel/{id}")
     public Order cancelOrder(
             @PathVariable Long id,
@@ -78,17 +70,13 @@ public Map<String, Object> placeOrder(@AuthenticationPrincipal UserDetails userD
         return orderService.cancelOrder(id, user);
     }
 
-    // =======================
     // 5) ADMIN ACCEPT ORDER
-    // =======================
     @PostMapping("/accept/{id}")
     public Order acceptOrder(@PathVariable Long id) {
         return orderService.acceptOrder(id);
     }
 
-    // =======================
     // 6) ADMIN MARK DELIVERED
-    // =======================
     @PostMapping("/deliver/{id}")
     public Order deliverOrder(@PathVariable Long id) {
 
@@ -102,9 +90,7 @@ public Map<String, Object> placeOrder(@AuthenticationPrincipal UserDetails userD
         return order;
     }
 
-    // =======================
     // 7) LIST ALL ORDERS (ADMIN)
-    // =======================
     @GetMapping("/all")
     public List<Order> allOrders() {
         return orderService.listAll();
