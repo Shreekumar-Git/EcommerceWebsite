@@ -1,0 +1,71 @@
+<!-- <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>Admin Orders</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  </head>
+  <body class="container mt-5">
+    <h2>All Orders</h2>
+
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr th:each="o : ${orders}">
+          <td th:text="${o.id}"></td>
+          <td th:text="${o.user.email}"></td>
+          <td>₹ <span th:text="${o.total}"></span></td>
+          <td>
+            <span class="badge bg-warning" th:if="${o.status == 'PENDING'}"
+              >Pending</span
+            >
+            <span class="badge bg-info" th:if="${o.status == 'PAID'}"
+              >Paid</span
+            >
+            <span class="badge bg-success" th:if="${o.status == 'DELIVERED'}"
+              >Delivered</span
+            >
+          </td>
+
+          <td>
+            <ul>
+              <li th:each="i : ${o.items}">
+                <span th:text="${i.product.name}"></span>
+                (x <span th:text="${i.quantity}"></span>)
+              </li>
+            </ul>
+          </td>
+
+          <td>
+            Accept -->
+<!-- <form
+              th:if="${o.status == 'PENDING'}"
+              th:action="@{/admin/orders/accept/{id}(id=${o.id})}"
+              method="post"
+            >
+              <button class="btn btn-primary btn-sm">Accept (Mark Paid)</button>
+            </form>
+
+            Deliver -->
+<!-- <form
+              th:if="${o.status == 'PAID'}"
+              th:action="@{/admin/orders/deliver/{id}(id=${o.id})}"
+              method="post"
+            >
+              <button class="btn btn-success btn-sm mt-2">Deliver</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html> -->

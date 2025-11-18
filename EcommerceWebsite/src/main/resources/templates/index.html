@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/extras/spring-security6"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>E-Commerce</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-light">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="/">E-Commerce</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="/">Home</a>
+            </li>
+
+            <!-- ADMIN ONLY -->
+            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+              <a class="nav-link" href="/admin/dashboard">Admin Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="/cart">Cart</a>
+            </li>
+          </ul>
+
+          <form class="d-flex ms-3" method="get" action="/search">
+            <input
+              class="form-control me-2"
+              style="width: 400px"
+              type="search"
+              name="keyword"
+              placeholder="Search products..."
+              th:value="${keyword}"
+            />
+            <button class="btn btn-outline-light" type="submit">Search</button>
+          </form>
+
+          <ul class="navbar-nav ms-auto">
+            <!-- Not logged in -->
+            <li class="nav-item" sec:authorize="isAnonymous()">
+              <a class="btn btn-primary px-3" href="/login">Login</a>
+            </li>
+
+            <!-- Logged in -->
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+              <a
+                class="nav-link dropdown-toggle text-white"
+                data-bs-toggle="dropdown"
+              >
+                <!-- username -->
+                <span sec:authentication="name"></span>
+
+                <!-- role -->
+                (<span
+                  sec:authentication="principal.authorities[0].authority"
+                ></span
+                >)
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="/orders">My Orders</a></li>
+
+                <li><hr class="dropdown-divider" /></li>
+
+                <li>
+                  <form method="post" action="/logout" class="m-0">
+                    <button class="dropdown-item text-danger">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HEADER -->
+    <div class="container my-4 text-center">
+      <h1 class="fw-bold">Welcome to the Store</h1>
+      <p class="text-muted">Browse our products and shop with ease</p>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="container mt-4">
+      <div class="row g-4">
+        <th:block th:each="p : ${products}">
+          <th:block th:if="${p != null}">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+              <div class="card p-3 shadow-sm h-100">
+                <img
+                  th:src="${p.imageUrl}"
+                  class="card-img-top"
+                  style="height: 200px; object-fit: cover"
+                  alt="product"
+                />
+
+                <div class="card-body">
+                  <h5 class="card-title" th:text="${p.name}"></h5>
+                  <p class="text-muted" th:text="${p.category}"></p>
+
+                  <h4 class="text-success">
+                    ₹ <span th:text="${p.price}"></span>
+                  </h4>
+
+                  <a
+                    th:href="@{'/product/' + ${p.id}}"
+                    class="btn btn-outline-primary w-100 mb-2"
+                  >
+                    View Details
+                  </a>
+
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      min="1"
+                      value="1"
+                      th:id="'qty-' + ${p.id}"
+                      class="form-control"
+                    />
+
+                    <button
+                      class="btn btn-primary"
+                      th:attr="onclick=|addToCart(${p.id})|"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </th:block>
+        </th:block>
+      </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-3 mt-5">
+      <p class="m-0">© 2025 E-Commerce Website</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AJAX ADD TO CART SCRIPT -->
+
+    <script>
+      function addToCart(productId) {
+        let qtyInput = document.getElementById("qty-" + productId);
+
+        if (!qtyInput) {
+          alert("Quantity selector missing!");
+          return;
+        }
+
+        let qty = qtyInput.value;
+
+        fetch(`/api/cart/add?productId=${productId}&qty=${qty}`, {
+          method: "POST",
+        }).then((r) => {
+          if (r.ok) {
+            alert("Added to cart");
+          } else {
+            alert("Failed");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

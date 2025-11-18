@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title th:text="${product.name}">Product</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-light">
+    <div class="container py-5">
+      <!-- PRODUCT CARD -->
+      <div class="row justify-content-center">
+        <div class="col-md-5">
+          <img
+            th:src="${product.imageUrl}"
+            class="img-fluid rounded shadow"
+            alt="Product Image"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <h2 class="fw-bold mb-3" th:text="${product.name}"></h2>
+
+          <p
+            class="text-muted mt-3"
+            th:text="${#strings.isEmpty(product.description) ? 'No description available.' : product.description}"
+          ></p>
+
+          <h4 class="text-success mb-3">
+            ₹ <span th:text="${product.price}"></span>
+          </h4>
+
+          <p>
+            <span class="badge bg-primary" th:text="${product.category}"></span>
+          </p>
+
+          <hr />
+
+          <!-- QUANTITY SELECTOR -->
+          <div class="mb-3">
+            <label class="form-label fw-bold">Quantity</label>
+            <input
+              id="qty"
+              type="number"
+              min="1"
+              value="1"
+              class="form-control w-25"
+            />
+          </div>
+
+          <!-- ADD TO CART -->
+          <button
+            class="btn btn-success btn-lg"
+            th:onclick="'addToCart(' + ${product.id} + ')'"
+          >
+            Add to Cart
+          </button>
+
+          <!-- GO BACK -->
+          <a href="/" class="btn btn-outline-secondary btn-lg ms-2"> Back </a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function addToCart(productId) {
+        const qty = document.getElementById("qty").value;
+
+        fetch(`/api/cart/add?productId=${productId}&qty=${qty}`, {
+          method: "POST",
+        }).then((res) => {
+          if (res.ok) {
+            alert("Added to cart!");
+          } else {
+            alert("Failed to add to cart");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

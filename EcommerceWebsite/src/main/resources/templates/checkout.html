@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkout</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body class="bg-light">
+    <div class="container my-5">
+      <h2 class="fw-bold mb-4">Checkout</h2>
+
+      <!-- Empty Cart Message -->
+      <div th:if="${#lists.isEmpty(cart)}" class="alert alert-info">
+        Your cart is empty. <a href="/" class="alert-link">Continue Shopping</a>
+      </div>
+
+      <!-- Cart Items -->
+      <div th:if="${!#lists.isEmpty(cart)}">
+        <table class="table table-bordered bg-white shadow-sm">
+          <thead class="table-dark">
+            <tr>
+              <th>Product</th>
+              <th>Qty</th>
+              <th>Price</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="item : ${cart}">
+              <td th:text="${item.product.name}"></td>
+              <td th:text="${item.quantity}"></td>
+              <td>₹ <span th:text="${item.product.price}"></span></td>
+              <td>
+                ₹ <span th:text="${item.product.price * item.quantity}"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Total -->
+        <h4 class="text-end mt-4">Total: ₹ <span th:text="${total}"></span></h4>
+
+        <!-- Place Order Button -->
+        <div class="text-end mt-3">
+          <button class="btn btn-success btn-lg px-4" onclick="placeOrder()">
+            Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+
+      function placeOrder() {
+        fetch("/api/orders/place", {
+          method: "POST",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id || data.orderId) {
+              const id = data.id || data.orderId;
+              window.location.href = "/order/confirmation?id=" + id;
+            } else {
+              alert("Something went wrong while placing your order.");
+            }
+          })
+          .catch(() => alert("Checkout failed."));
+      }
+    </script>
+  </body>
+</html>
